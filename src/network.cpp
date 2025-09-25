@@ -143,3 +143,19 @@ Server::~Server() {
     close(new_socket);
     close(server_fd);
 };
+
+
+Client::Client(const std::string& server_ip, int port) : SERVER_IP(server_ip), PORT(port) {
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        std::cerr << "socket error" << std::endl;
+        exit;
+    }
+
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(port);
+
+    if (inet_pton(AF_INET, SERVER_IP.c_str(), &server_addr.sin_addr) <= 0) {
+        std::cerr << "invalid IP address or address not supported" << std::endl;
+        exit;
+    }
+};

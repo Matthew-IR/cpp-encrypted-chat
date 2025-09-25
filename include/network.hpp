@@ -48,6 +48,7 @@ class Client {
         int sock;
         struct sockaddr_in server_addr;
         const int PORT;
+        const std::string SERVER_IP;
 
     public:
         Client(const std::string& server_ip, int port);
