@@ -93,3 +93,19 @@ std::string Network::receive_data() {
 void Network::disconnect() {
 
 };
+
+
+Server::Server(int port) : PORT(port) {
+
+};
+
+void network_listen();
+
+void send_data(const std::string& data);
+
+std::string receive_data();
+
+Server::~Server() {
+    close(new_socket);
+    close(server_fd);
+};
