@@ -15,7 +15,6 @@ int main(int argc, char* argv[]) {
 
     Network peer_network;
     bool connected = false;
-    bool connect_success = false;
 
     if (args[1] == "listen") {
         connected = peer_network.network_listen(PORT);
@@ -25,7 +24,8 @@ int main(int argc, char* argv[]) {
             std::cerr << "Usage: " << args[0] << " connect <ip_address>" << std::endl;
             return 1;
         }
-        connect_success = peer_network.network_connect(args[2], PORT);
+        int result = peer_network.network_connect(args[2], PORT);
+
     }
 
     return 0;

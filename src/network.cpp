@@ -55,12 +55,12 @@ bool Network::network_listen(int port) {
 
 };
 
-bool Network::network_connect(const std::string& ip_address, int port) {
+int Network::network_connect(const std::string& ip_address, int port) {
 
     int client_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (client_socket == -1) {
         std::cerr << "socket error" << std::endl;
-        return false;
+        return -1;
     }
 
     sockaddr_in server_address;
@@ -70,16 +70,16 @@ bool Network::network_connect(const std::string& ip_address, int port) {
     if (inet_pton(AF_INET, ip_address.c_str(), &server_address.sin_addr) <= 0) {
         std::cerr << "invalid IP address or address not supported" << std::endl;
         close(client_socket);
-        return false;
+        return -1;
     }
 
     if (connect(client_socket, (struct sockaddr*)&server_address, sizeof(server_address)) < 0) {
         std::cerr << "connection error" << std::endl;
         close(client_socket);
-        return false;
+        return -1;
     }
 
-    return true;
+    return client_socket;
 };
 
 bool Network::send_data(const std::string& data) {
