@@ -5,7 +5,7 @@ class Network {
     public:
         Network();
 
-        bool listen(int port);
+        bool network_listen(int port);
 
         bool connect(const std::string& ip_address, int port);
 
@@ -14,4 +14,7 @@ class Network {
         std::string receive_data();
 
         void disconnect();
+    
+    private:
+        int client_socket;
 };

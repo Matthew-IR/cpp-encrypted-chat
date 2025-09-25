@@ -2,9 +2,13 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
-#include <network.hpp>
+#include "network.hpp"
 
-bool Network::listen(int port) {
+Network::Network() {
+    
+}
+
+bool Network::network_listen(int port) {
     // Create socket
     int server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket == -1) {
@@ -17,13 +21,37 @@ bool Network::listen(int port) {
     server_address.sin_port = htons(port);
     server_address.sin_addr.s_addr = INADDR_ANY;
 
+    std::cout << "Binding to port: " << port << std::endl;
+
     if (bind(server_socket, (struct sockaddr*)& server_address, sizeof(server_address)) < 0) {
         std::cerr << "Bind error" << std::endl;
         close(server_socket);
         return false;
     }
 
-    
+    if (listen(server_socket, 5) == -1) {
+        std::cerr << "listen failed" << std::endl;
+        close(server_socket);
+        return false;
+    }
+
+
+    while (1) {
+        int client_socket = accept(server_socket, nullptr, nullptr);
+        if (client_socket == -1) {
+            std::cerr << "Accept error" << std::endl;
+            close(server_socket);
+            return false;
+        }
+
+        close(client_socket);
+        std::cout << "Connected" << std::endl;        
+    }
+
+    close(server_socket);
+    return false;
+
+
 };
 
 bool Network::connect(const std::string& ip_address, int port) {
