@@ -13,8 +13,6 @@ int main(int argc, char* argv[]) {
         return 1;
     } 
 
-    Network peer_network;
-    bool connected = false;
 
     if (args[1] == "listen") {
         // connected = peer_network.network_listen(PORT);
