@@ -42,11 +42,13 @@ void Server::network_listen() {
 };
 
 void Server::send_data(const std::string& data) {
-    
+    send(new_socket, data.c_str(), data.length(), 0);
 };
 
 std::string Server::receive_data() {
-
+    char buffer[1024] = {0};
+    read(new_socket, buffer, 1024);
+    return std::string(buffer);
 };
 
 Server::~Server() {
@@ -78,11 +80,13 @@ void Client::connect_to_server() {
 };
 
 void Client::send_data(const std::string& data) {
-
+    send(sock, data.c_str(), data.length(), 0);
 };
 
 std::string Client::receive_data() {
-
+    char buffer[1024] = {0};
+    read(sock, buffer, 1024);
+    return std::string(buffer);
 };
 
 Client::~Client() {
