@@ -17,7 +17,9 @@ int main(int argc, char* argv[]) {
     bool connected = false;
 
     if (args[1] == "listen") {
-        connected = peer_network.network_listen(PORT);
+        // connected = peer_network.network_listen(PORT);
+        Server server(8080);
+        server.network_listen();
 
     } else if (args[1] == "connect") {
         if (args.size() < 3) {

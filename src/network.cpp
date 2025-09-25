@@ -97,13 +97,47 @@ void Network::disconnect() {
 
 Server::Server(int port) : PORT(port) {
 
+    server_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (server_fd == -1) {
+        std::cerr << "Socket error" << std::endl;
+        exit;
+    }
+
+    // sockaddr_in server_address;
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+    addr.sin_addr.s_addr = INADDR_ANY;
+
+    std::cout << "Binding to port: " << port << std::endl;
+
+    if (bind(server_fd, (struct sockaddr*)& addr, sizeof(addr)) < 0) {
+        std::cerr << "Bind error" << std::endl;
+        exit;
+    }
 };
 
-void network_listen();
+void Server::network_listen() {
+    if (listen(server_fd, 5) < 0) {
+        std::cerr << "listen failed" << std::endl;
+        exit;
+    }
 
-void send_data(const std::string& data);
+    if ((new_socket = accept(server_fd, (struct sockaddr *)&addr, (socklen_t*)&ip_len)) < 0) {
+        std::cerr << "Accept error" << std::endl;
+        exit;
+    }
 
-std::string receive_data();
+    std::cout << "Connected" << std::endl;        
+    
+};
+
+void Server::send_data(const std::string& data) {
+    
+};
+
+std::string Server::receive_data() {
+
+};
 
 Server::~Server() {
     close(new_socket);

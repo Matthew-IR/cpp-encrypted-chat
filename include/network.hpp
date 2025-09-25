@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <sys/socket.h>
+#include <netinet/in.h>
 
 class Network {
     public:
