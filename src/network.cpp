@@ -159,3 +159,22 @@ Client::Client(const std::string& server_ip, int port) : SERVER_IP(server_ip), P
         exit;
     }
 };
+
+void Client::connect_to_server() {
+    if (connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
+        std::cerr << "connection error" << std::endl;
+        exit;
+    }
+};
+
+void Client::send_data(const std::string& data) {
+
+};
+
+std::string Client::receive_data() {
+
+};
+
+Client::~Client() {
+    close(sock);
+};

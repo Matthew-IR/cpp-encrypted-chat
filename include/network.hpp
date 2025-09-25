@@ -53,5 +53,11 @@ class Client {
     public:
         Client(const std::string& server_ip, int port);
 
+        void connect_to_server();
+
+        void send_data(const std::string& data);
+
+        std::string receive_data();
+
         ~Client();
 };

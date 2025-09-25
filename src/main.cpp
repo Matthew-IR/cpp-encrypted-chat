@@ -26,7 +26,9 @@ int main(int argc, char* argv[]) {
             std::cerr << "Usage: " << args[0] << " connect <ip_address>" << std::endl;
             return 1;
         }
-        int result = peer_network.network_connect(args[2], PORT);
+        
+        Client client("127.0.0.1", 8080);
+        client.connect_to_server();
 
     }
 
