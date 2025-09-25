@@ -18,6 +18,9 @@ int main(int argc, char* argv[]) {
         // connected = peer_network.network_listen(PORT);
         Server server(8080);
         server.network_listen();
+        std::string clientmessage = server.receive_data();
+        std::cout << "Client: " << clientmessage << std::endl;
+        server.send_data("Returning");
 
     } else if (args[1] == "connect") {
         if (args.size() < 3) {
@@ -27,6 +30,9 @@ int main(int argc, char* argv[]) {
         
         Client client("127.0.0.1", 8080);
         client.connect_to_server();
+        client.send_data("Test");
+        std::string returnmessage = client.receive_data();
+        std::cout << "Server: " << returnmessage << std::endl;
 
     }
 
