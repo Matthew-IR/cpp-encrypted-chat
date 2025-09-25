@@ -20,8 +20,12 @@ int main(int argc, char* argv[]) {
     if (args[1] == "listen") {
         connected = peer_network.network_listen(PORT);
 
-    } else if (args[2] == "connect") {
-        connect_success = peer_network.connect("", PORT);
+    } else if (args[1] == "connect") {
+        if (args.size() < 3) {
+            std::cerr << "Usage: " << args[0] << " connect <ip_address>" << std::endl;
+            return 1;
+        }
+        connect_success = peer_network.network_connect(args[2], PORT);
     }
 
     return 0;

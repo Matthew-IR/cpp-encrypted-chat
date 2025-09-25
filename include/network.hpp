@@ -7,7 +7,7 @@ class Network {
 
         bool network_listen(int port);
 
-        bool connect(const std::string& ip_address, int port);
+        bool network_connect(const std::string& ip_address, int port);
 
         bool send_data(const std::string& data);
 

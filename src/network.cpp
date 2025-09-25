@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <unistd.h>
 #include "network.hpp"
 
@@ -54,8 +55,31 @@ bool Network::network_listen(int port) {
 
 };
 
-bool Network::connect(const std::string& ip_address, int port) {
+bool Network::network_connect(const std::string& ip_address, int port) {
 
+    int client_socket = socket(AF_INET, SOCK_STREAM, 0);
+    if (client_socket == -1) {
+        std::cerr << "socket error" << std::endl;
+        return false;
+    }
+
+    sockaddr_in server_address;
+    server_address.sin_family = AF_INET;
+    server_address.sin_port = htons(port);
+
+    if (inet_pton(AF_INET, ip_address.c_str(), &server_address.sin_addr) <= 0) {
+        std::cerr << "invalid IP address or address not supported" << std::endl;
+        close(client_socket);
+        return false;
+    }
+
+    if (connect(client_socket, (struct sockaddr*)&server_address, sizeof(server_address)) < 0) {
+        std::cerr << "connection error" << std::endl;
+        close(client_socket);
+        return false;
+    }
+
+    return true;
 };
 
 bool Network::send_data(const std::string& data) {
