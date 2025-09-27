@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "handle_crypto.hpp"
 
 int main(int argc, char* argv[]) {
 
@@ -15,7 +16,13 @@ int main(int argc, char* argv[]) {
 
 
     if (args[1] == "listen") {
-        // connected = peer_network.network_listen(PORT);
+        // connected = peer_network.network_listen(PORT)
+        
+
+        DHExchange dh;
+        dh.generate_parameters();
+
+        
         Server server(8080);
         server.network_listen();
         std::string clientmessage = server.receive_data();
