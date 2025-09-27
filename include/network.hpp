@@ -51,13 +51,28 @@ class Client {
         const std::string SERVER_IP;
 
     public:
+        /** 
+         * @brief Constructs a new Client object.
+         * @param server_ip The ip of the server that the client is connecting to
+         * @param port The ip that is open on the server listening
+        */
         Client(const std::string& server_ip, int port);
-
+        /** 
+         * @brief Connect to the listening server
+        */
         void connect_to_server();
-
+        /** 
+         * @brief Sends data to the connected server.
+         * @param data The string of data that is being sent over the socket.
+        */
         void send_data(const std::string& data);
-
+        /** 
+         * @brief Receives data from the connected server.
+         * @return The data that has received as a string.
+        */
         std::string receive_data();
-
+        /** 
+         * @brief Desstructor for the Client class.
+        */
         ~Client();
 };
