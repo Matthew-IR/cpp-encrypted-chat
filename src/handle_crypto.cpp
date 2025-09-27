@@ -14,7 +14,6 @@ void DHExchange::generate_parameters() {
 
 
     CryptoPP::AutoSeededRandomPool prng;
-    CryptoPP::Integer p, q, g;
     CryptoPP::PrimeAndGenerator pg;
 
     // Should use 512, 512 but was generating slowly
@@ -25,10 +24,13 @@ void DHExchange::generate_parameters() {
 
     CryptoPP::DH dh(p, q, g);
 
-    CryptoPP::SecByteBlock t1(dh.PrivateKeyLength()), t2(dh.PublicKeyLength());
-    dh.GenerateKeyPair(prng, t1, t2);
-    CryptoPP::Integer k1(t1.size()), k2(t2, t2.size());
+    public_key.resize(dh.PublicKeyLength());
+    private_key.resize(dh.PrivateKeyLength());
 
-    std::cout << "PrivK: " << k1 << std::endl;
-    std::cout << "PubK: " << k2 << std::endl;
+    dh.GenerateKeyPair(prng, private_key, public_key);
+
+    // Testing with integer representation
+    // CryptoPP::Integer k1(public_key, public_key.size());
+    // CryptoPP::Integer k2(private_key, private_key.size());
+
 };
