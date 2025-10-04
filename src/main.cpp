@@ -25,9 +25,15 @@ int main(int argc, char* argv[]) {
         
         Server server(8080);
         server.network_listen();
-        std::string clientmessage = server.receive_data();
-        std::cout << "Client: " << clientmessage << std::endl;
-        server.send_data("Returning");
+        while (true) {
+            std::string clientmessage = server.receive_data();
+            std::cout << "Client: " << clientmessage << std::endl;
+            if (clientmessage == "exit") {
+                break;
+            }
+            server.send_data("Success Message");
+        }
+
 
     } else if (args[1] == "connect") {
         if (args.size() < 3) {
@@ -37,9 +43,21 @@ int main(int argc, char* argv[]) {
         
         Client client("127.0.0.1", 8080);
         client.connect_to_server();
-        client.send_data("Test");
-        std::string returnmessage = client.receive_data();
-        std::cout << "Server: " << returnmessage << std::endl;
+        // client.send_data("Test");
+
+        while (true) {
+            std::cout << "You: ";
+            std::getline(std::cin, args[2]);
+            client.send_data(args[2]);
+            if (args[2] == "exit") {
+                break;
+            }
+
+            std::string returnmessage = client.receive_data();
+            std::cout << "Server: " << returnmessage << std::endl;
+
+        }
+
 
     }
 
