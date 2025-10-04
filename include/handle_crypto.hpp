@@ -12,6 +12,9 @@ class DHExchange {
     public:
         DHExchange();
 
+        std::string convert_integer_to_hex(const CryptoPP::Integer& num);
+        CryptoPP::Integer convert_hex_to_integer(const std::string& hexStr);
+
         void generate_parameters();
 
         const CryptoPP::Integer& get_p() const {return p;};

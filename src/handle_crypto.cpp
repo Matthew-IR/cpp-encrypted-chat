@@ -10,6 +10,22 @@
 
 DHExchange::DHExchange() {};
 
+std::string DHExchange::convert_integer_to_hex(const CryptoPP::Integer& num) {
+    std::string encoded;
+
+    CryptoPP::HexEncoder encoder(new CryptoPP::StringSink(encoded));
+
+    num.Encode(encoder, num.MinEncodedSize() );
+
+    return encoded;
+
+};
+
+CryptoPP::Integer DHExchange::convert_hex_to_integer(const std::string& hexStr) {
+    CryptoPP::Integer num(("0x" + hexStr).c_str());
+    return num;
+};
+
 void DHExchange::generate_parameters() {
 
 
