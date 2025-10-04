@@ -85,3 +85,10 @@ void DHExchange::set_parameters(const CryptoPP::Integer& prime, const CryptoPP::
 
     dh.AccessGroupParameters().Initialize(p, g);
 };
+
+void DHExchange::generate_shared_secret(const CryptoPP::SecByteBlock& other_public_key) {
+    shared_secret.New(dh.AgreedValueLength());
+    if (!dh.Agree(shared_secret, private_key, other_public_key)) {
+        throw std::runtime_error("Failed shared secret.");
+    }
+};
