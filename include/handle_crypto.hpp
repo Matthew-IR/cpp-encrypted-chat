@@ -9,6 +9,7 @@ class DHExchange {
         CryptoPP::Integer g;
         CryptoPP::SecByteBlock public_key;
         CryptoPP::SecByteBlock private_key;
+        CryptoPP::AutoSeededRandomPool rng;
     public:
         DHExchange();
 
@@ -18,6 +19,8 @@ class DHExchange {
         void generate_parameters();
 
         void set_parameters(const CryptoPP::Integer& prime, const CryptoPP::Integer& generator);
+
+        void generate_keys();
 
         const CryptoPP::Integer& get_p() const {return p;};
         const CryptoPP::Integer& get_q() const {return q;};

@@ -51,6 +51,12 @@ void DHExchange::generate_parameters() {
 
 };
 
+void DHExchange::generate_keys() {
+    public_key.New(dh.PublicKeyLength());
+    private_key.New(dh.PrivateKeyLength());
+    dh.GenerateKeyPair(rng, private_key, public_key);
+};
+
 void DHExchange::set_parameters(const CryptoPP::Integer& prime, const CryptoPP::Integer& generator) {
     p = prime;
     g = generator;
