@@ -20,11 +20,29 @@ int main(int argc, char* argv[]) {
         
 
         DHExchange dh;
+        // Generate parameters and public/private key pair
         dh.generate_parameters();
 
         
         Server server(8080);
         server.network_listen();
+
+        // Send public parameters
+        server.send_data(dh.convert_integer_to_hex(dh.get_p()));
+        server.send_data(dh.convert_integer_to_hex(dh.get_g()));
+
+        // Receive client public key
+        std::string client_pub_key_str = server.receive_data();
+
+
+        // Send server public key to client
+        server.send_data(dh.convert_key_to_hex(dh.get_public_key()));
+
+        std::cout << "client pub key: " << (client_pub_key_str) << std::endl;
+        std::cout << "server pub key: " << dh.convert_key_to_hex(dh.get_public_key()) << std::endl;
+        
+
+
         while (true) {
             std::string clientmessage = server.receive_data();
             std::cout << "Client: " << clientmessage << std::endl;
@@ -43,7 +61,25 @@ int main(int argc, char* argv[]) {
         
         Client client("127.0.0.1", 8080);
         client.connect_to_server();
-        // client.send_data("Test");
+        
+        DHExchange dh_client;
+
+        // Receive public parameters
+        std::string p_str = client.receive_data();
+        std::string g_str = client.receive_data();
+
+        // Generate client public and private key
+        dh_client.set_parameters(dh_client.convert_hex_to_integer(p_str), dh_client.convert_hex_to_integer(g_str));
+        dh_client.generate_keys();
+
+        // Send client public key to server
+        client.send_data(dh_client.convert_key_to_hex(dh_client.get_public_key()));
+
+        // Receive server public key
+        std::string server_pub_key_str = client.receive_data();
+
+        std::cout << "server pub key: " << (server_pub_key_str) << std::endl;
+        std::cout << "client pub key: " << dh_client.convert_key_to_hex(dh_client.get_public_key()) << std::endl;
 
         while (true) {
             std::cout << "You: ";

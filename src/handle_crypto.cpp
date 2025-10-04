@@ -5,6 +5,8 @@
 #include "cryptopp/hex.h"
 #include "cryptopp/filters.h"
 #include "cryptopp/osrng.h"
+#include <cryptopp/files.h>
+#include <cryptopp/secblock.h>
 
 #include <iostream>
 
@@ -24,6 +26,26 @@ std::string DHExchange::convert_integer_to_hex(const CryptoPP::Integer& num) {
 CryptoPP::Integer DHExchange::convert_hex_to_integer(const std::string& hexStr) {
     CryptoPP::Integer num(("0x" + hexStr).c_str());
     return num;
+};
+
+std::string DHExchange::convert_key_to_hex(const CryptoPP::SecByteBlock& key) {
+    std::string encoded_hex;
+
+    // Create a pipeline to encode the key data into hex
+    CryptoPP::StringSource ss(key.data(), key.size(), true,
+            new CryptoPP::HexEncoder(new CryptoPP::StringSink(encoded_hex))
+    );
+
+    return encoded_hex;
+};
+
+CryptoPP::SecByteBlock DHExchange::convert_hex_to_key(const std::string& hexStr) {
+    // SecByteBlockSink is deprecated, use ArraySink
+    CryptoPP::SecByteBlock key(hexStr.length() / 2);
+    CryptoPP::StringSource ss(hexStr, true,
+        new CryptoPP::HexDecoder(new CryptoPP::ArraySink(key, key.size()))
+    );
+    return key;
 };
 
 void DHExchange::generate_parameters() {

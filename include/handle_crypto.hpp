@@ -1,5 +1,6 @@
 #pragma once
 #include <cryptopp/dh.h>
+#include <cryptopp/osrng.h>
 
 class DHExchange {
     private:
@@ -15,6 +16,9 @@ class DHExchange {
 
         std::string convert_integer_to_hex(const CryptoPP::Integer& num);
         CryptoPP::Integer convert_hex_to_integer(const std::string& hexStr);
+
+        std::string convert_key_to_hex(const CryptoPP::SecByteBlock& key);
+        CryptoPP::SecByteBlock convert_hex_to_key(const std::string& hexStr);
 
         void generate_parameters();
 
