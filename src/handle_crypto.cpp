@@ -92,3 +92,12 @@ void DHExchange::generate_shared_secret(const CryptoPP::SecByteBlock& other_publ
         throw std::runtime_error("Failed shared secret.");
     }
 };
+
+void DHExchange::derive_aes_key() {
+        CryptoPP::SecByteBlock derived_key;
+        derived_key.New(32); // 256 bit key
+        CryptoPP::SHA256 hash;
+        hash.Update(shared_secret, shared_secret.size());
+        hash.TruncatedFinal(derived_key, derived_key.size());
+        aes_key = derived_key;
+};

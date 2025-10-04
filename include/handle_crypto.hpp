@@ -12,6 +12,7 @@ class DHExchange {
         CryptoPP::SecByteBlock private_key;
         CryptoPP::AutoSeededRandomPool rng;
         CryptoPP::SecByteBlock shared_secret;
+        CryptoPP::SecByteBlock aes_key;
     public:
         DHExchange();
 
@@ -29,10 +30,13 @@ class DHExchange {
 
         void generate_shared_secret(const CryptoPP::SecByteBlock& other_public_key);
 
+        void derive_aes_key();
+
         const CryptoPP::Integer& get_p() const {return p;};
         const CryptoPP::Integer& get_q() const {return q;};
         const CryptoPP::Integer& get_g() const {return g;};
         const CryptoPP::SecByteBlock& get_public_key() const {return public_key;};
         const CryptoPP::SecByteBlock& get_private_key() const {return private_key;};
         const CryptoPP::SecByteBlock& get_shared_secret() const {return shared_secret;};
+        const CryptoPP::SecByteBlock& get_aes_key() const {return aes_key;};
 };

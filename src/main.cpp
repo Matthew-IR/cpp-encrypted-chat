@@ -38,12 +38,18 @@ int main(int argc, char* argv[]) {
         // Send server public key to client
         server.send_data(dh.convert_key_to_hex(dh.get_public_key()));
 
-        std::cout << "client pub key: " << (client_pub_key_str) << std::endl;
-        std::cout << "server pub key: " << dh.convert_key_to_hex(dh.get_public_key()) << std::endl;
+        // std::cout << "client pub key: " << (client_pub_key_str) << std::endl;
+        // std::cout << "server pub key: " << dh.convert_key_to_hex(dh.get_public_key()) << std::endl;
         
         // Shared secret
         dh.generate_shared_secret(dh.convert_hex_to_key(client_pub_key_str));
-        std::cout << "Shared secret: :: " << dh.convert_key_to_hex(dh.get_shared_secret()) << std::endl;
+        // std::cout << "Shared secret: " << dh.convert_key_to_hex(dh.get_shared_secret()) << std::endl;
+
+
+        // derive key from shared secret
+        dh.derive_aes_key();
+        std::cout << "AES key: :: " << dh.convert_key_to_hex(dh.get_aes_key()) << std::endl;
+
 
         while (true) {
             std::string clientmessage = server.receive_data();
@@ -80,12 +86,17 @@ int main(int argc, char* argv[]) {
         // Receive server public key
         std::string server_pub_key_str = client.receive_data();
 
-        std::cout << "server pub key: " << (server_pub_key_str) << std::endl;
-        std::cout << "client pub key: " << dh_client.convert_key_to_hex(dh_client.get_public_key()) << std::endl;
+        // std::cout << "server pub key: " << (server_pub_key_str) << std::endl;
+        // std::cout << "client pub key: " << dh_client.convert_key_to_hex(dh_client.get_public_key()) << std::endl;
 
         // Shared secret
         dh_client.generate_shared_secret(dh_client.convert_hex_to_key(server_pub_key_str));
-        std::cout << "Shared secret: :: " << dh_client.convert_key_to_hex(dh_client.get_shared_secret()) << std::endl;
+        // std::cout << "Shared secret: " << dh_client.convert_key_to_hex(dh_client.get_shared_secret()) << std::endl;
+
+        // derive key from shared secret
+        dh_client.derive_aes_key();
+        std::cout << "AES key: " << dh_client.convert_key_to_hex(dh_client.get_aes_key()) << std::endl;
+
 
         while (true) {
             std::cout << "You: ";
