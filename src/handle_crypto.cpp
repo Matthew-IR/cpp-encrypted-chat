@@ -60,7 +60,7 @@ void DHExchange::generate_parameters() {
     q = pg.SubPrime();
     g = pg.Generator();
 
-    CryptoPP::DH dh(p, q, g);
+    dh.AccessGroupParameters().Initialize(p, q, g);
 
     public_key.resize(dh.PublicKeyLength());
     private_key.resize(dh.PrivateKeyLength());
