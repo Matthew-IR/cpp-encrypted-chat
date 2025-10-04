@@ -17,6 +17,8 @@ class DHExchange {
 
         void generate_parameters();
 
+        void set_parameters(const CryptoPP::Integer& prime, const CryptoPP::Integer& generator);
+
         const CryptoPP::Integer& get_p() const {return p;};
         const CryptoPP::Integer& get_q() const {return q;};
         const CryptoPP::Integer& get_g() const {return g;};

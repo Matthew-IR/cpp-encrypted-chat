@@ -50,3 +50,10 @@ void DHExchange::generate_parameters() {
     // CryptoPP::Integer k2(private_key, private_key.size());
 
 };
+
+void DHExchange::set_parameters(const CryptoPP::Integer& prime, const CryptoPP::Integer& generator) {
+    p = prime;
+    g = generator;
+
+    dh.AccessGroupParameters().Initialize(p, g);
+};
