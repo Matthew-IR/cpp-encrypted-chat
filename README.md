@@ -6,7 +6,7 @@ The project uses the Crypto++ library.
 
 The project was developed as an exercise to implement cryptographic concepts. It is **not intended for real-world use**.
 
-The focus was not on creating a production ready application. It has not been tested and may contain security vulnerabilities, e.g. input sanitisation.
+The focus was not on creating a production ready application. It has not been tested and may contain security vulnerabilities, e.g. input sanitisation, MITM attacks.
 
 **Do not use this to transmit any sensitive or private information.**
 
