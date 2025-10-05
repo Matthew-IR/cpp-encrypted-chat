@@ -119,7 +119,11 @@ std::string DHExchange::encrypt(const std::string& plaintext) {
             )
         );
 
-        return ciphertext;
+        std::string iv_hex = convert_key_to_hex(iv);
+
+        std::cout << "Sending ciphertext: " << ciphertext << std::endl;
+
+        return std::string(reinterpret_cast<const char*>(iv.BytePtr()), iv.size()) + ciphertext;
 
     } catch (CryptoPP::Exception& e) {
         std::cerr << "Error setting AES key and IV: " << e.what() << std::endl;
@@ -129,21 +133,30 @@ std::string DHExchange::encrypt(const std::string& plaintext) {
 
 std::string DHExchange::decrypt(const std::string& ciphertext) {
 
+    // std::cout << "Receiving ciphertext: " << ciphertext << std::endl;
+
+    std::string iv_str = ciphertext.substr(0, 12);
+
+    CryptoPP::SecByteBlock received_iv(reinterpret_cast<const CryptoPP::byte*>(iv_str.data()), iv_str.size());
+
+    std::string actual_ciphertext = ciphertext.substr(12);
+    // std::cout << "Actual ciphertext: " << actual_ciphertext << std::endl;
+
+
     std::string plaintext;
+
+    // decrypt the message
     try {
         CryptoPP::GCM<CryptoPP::AES>::Decryption dec;
-        dec.SetKeyWithIV(aes_key, aes_key.size(), nullptr, 0);
-
-        CryptoPP::StringSource ss(ciphertext, true,
+        dec.SetKeyWithIV(aes_key, aes_key.size(), received_iv, received_iv.size());
+        CryptoPP::StringSource ss(actual_ciphertext, true,
             new CryptoPP::AuthenticatedDecryptionFilter(dec,
                 new CryptoPP::StringSink(plaintext)
             )
         );
-
         return plaintext;
-
     } catch (CryptoPP::Exception& e) {
-        std::cerr << "Error setting AES key and IV: " << e.what() << std::endl;
+        std::cerr << "Error during decryption: " << e.what() << std::endl;
         throw;
-    }
+    }   
 };
