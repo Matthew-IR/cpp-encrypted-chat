@@ -129,4 +129,21 @@ std::string DHExchange::encrypt(const std::string& plaintext) {
 
 std::string DHExchange::decrypt(const std::string& ciphertext) {
 
+    std::string plaintext;
+    try {
+        CryptoPP::GCM<CryptoPP::AES>::Decryption dec;
+        dec.SetKeyWithIV(aes_key, aes_key.size(), nullptr, 0);
+
+        CryptoPP::StringSource ss(ciphertext, true,
+            new CryptoPP::AuthenticatedDecryptionFilter(dec,
+                new CryptoPP::StringSink(plaintext)
+            )
+        );
+
+        return plaintext;
+
+    } catch (CryptoPP::Exception& e) {
+        std::cerr << "Error setting AES key and IV: " << e.what() << std::endl;
+        throw;
+    }
 };
