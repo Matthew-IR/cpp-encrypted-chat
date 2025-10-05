@@ -7,6 +7,8 @@
 #include "cryptopp/osrng.h"
 #include <cryptopp/files.h>
 #include <cryptopp/secblock.h>
+#include <cryptopp/aes.h>
+#include <cryptopp/gcm.h>
 
 #include <iostream>
 
@@ -100,4 +102,31 @@ void DHExchange::derive_aes_key() {
         hash.Update(shared_secret, shared_secret.size());
         hash.TruncatedFinal(derived_key, derived_key.size());
         aes_key = derived_key;
+};
+
+std::string DHExchange::encrypt(const std::string& plaintext) {
+    std::string ciphertext;
+    CryptoPP::SecByteBlock iv(12);
+    rng.GenerateBlock(iv, iv.size());
+
+    try {
+        CryptoPP::GCM<CryptoPP::AES>::Encryption enc;
+        enc.SetKeyWithIV(aes_key, aes_key.size(), iv, iv.size());
+
+        CryptoPP::StringSource ss(plaintext, true,
+            new CryptoPP::AuthenticatedEncryptionFilter(enc,
+                new CryptoPP::StringSink(ciphertext)
+            )
+        );
+
+        return ciphertext;
+
+    } catch (CryptoPP::Exception& e) {
+        std::cerr << "Error setting AES key and IV: " << e.what() << std::endl;
+        throw;
+    }
+};
+
+std::string DHExchange::decrypt(const std::string& ciphertext) {
+
 };

@@ -32,6 +32,9 @@ class DHExchange {
 
         void derive_aes_key();
 
+        std::string encrypt(const std::string& plaintext);
+        std::string decrypt(const std::string& ciphertext);
+
         const CryptoPP::Integer& get_p() const {return p;};
         const CryptoPP::Integer& get_q() const {return q;};
         const CryptoPP::Integer& get_g() const {return g;};

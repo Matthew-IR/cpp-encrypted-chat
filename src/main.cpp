@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 
         // derive key from shared secret
         dh.derive_aes_key();
-        std::cout << "AES key: :: " << dh.convert_key_to_hex(dh.get_aes_key()) << std::endl;
+        std::cout << "AES key: " << dh.convert_key_to_hex(dh.get_aes_key()) << std::endl;
 
 
         while (true) {
@@ -101,7 +101,7 @@ int main(int argc, char* argv[]) {
         while (true) {
             std::cout << "You: ";
             std::getline(std::cin, args[2]);
-            client.send_data(args[2]);
+            client.send_data(dh_client.encrypt(args[2]));
             if (args[2] == "exit") {
                 break;
             }
