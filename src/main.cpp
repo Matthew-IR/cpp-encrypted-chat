@@ -52,12 +52,12 @@ int main(int argc, char* argv[]) {
 
 
         while (true) {
-            std::string clientmessage = server.receive_data();
+            std::string clientmessage = dh.decrypt(server.receive_data());
             std::cout << "Client: " << clientmessage << std::endl;
             if (clientmessage == "exit") {
                 break;
             }
-            server.send_data("Success Message");
+            server.send_data(dh.encrypt("Success Message"));
         }
 
 
@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
                 break;
             }
 
-            std::string returnmessage = client.receive_data();
+            std::string returnmessage =(dh_client.decrypt(client.receive_data()));
             std::cout << "Server: " << returnmessage << std::endl;
 
         }
