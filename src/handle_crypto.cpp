@@ -9,6 +9,7 @@
 #include <cryptopp/secblock.h>
 #include <cryptopp/aes.h>
 #include <cryptopp/gcm.h>
+#include <cryptopp/base64.h>
 
 #include <iostream>
 
@@ -119,11 +120,21 @@ std::string DHExchange::encrypt(const std::string& plaintext) {
             )
         );
 
-        std::string iv_hex = convert_key_to_hex(iv);
 
-        std::cout << "Sending ciphertext: " << ciphertext << std::endl;
+        std::string combined = std::string(reinterpret_cast<const char*>(iv.BytePtr()), iv.size()) + ciphertext;
+        
+        // Base64 encode the combined data (iv + ciphertext)
+        std::string encoded_output;
+        CryptoPP::StringSource ss_encode(combined, true,
+            new CryptoPP::Base64Encoder(
+                new CryptoPP::StringSink(encoded_output),
+                false
+            )
+        );
 
-        return std::string(reinterpret_cast<const char*>(iv.BytePtr()), iv.size()) + ciphertext;
+        std::cout << "Encoded output: " << encoded_output << std::endl;
+
+        return encoded_output;
 
     } catch (CryptoPP::Exception& e) {
         std::cerr << "Error setting AES key and IV: " << e.what() << std::endl;
@@ -133,13 +144,26 @@ std::string DHExchange::encrypt(const std::string& plaintext) {
 
 std::string DHExchange::decrypt(const std::string& ciphertext) {
 
+    std::string decoded_ciphertext;
+    try {
+        CryptoPP::StringSource ss_decode(ciphertext, true,
+            new CryptoPP::Base64Decoder(
+                new CryptoPP::StringSink(decoded_ciphertext)
+            )
+        );
+    } catch (const CryptoPP::Exception& e) {
+        std::cerr << "Error during Base64 decoding: " << e.what() << std::endl;
+        throw;
+    }
+
     // std::cout << "Receiving ciphertext: " << ciphertext << std::endl;
 
-    std::string iv_str = ciphertext.substr(0, 12);
+    const int IV_SIZE = 12;
+    std::string iv_str = decoded_ciphertext.substr(0, IV_SIZE);
 
     CryptoPP::SecByteBlock received_iv(reinterpret_cast<const CryptoPP::byte*>(iv_str.data()), iv_str.size());
 
-    std::string actual_ciphertext = ciphertext.substr(12);
+    std::string actual_ciphertext = decoded_ciphertext.substr(IV_SIZE);
     // std::cout << "Actual ciphertext: " << actual_ciphertext << std::endl;
 
 

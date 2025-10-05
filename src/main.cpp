@@ -95,7 +95,7 @@ int main(int argc, char* argv[]) {
 
         // derive key from shared secret
         dh_client.derive_aes_key();
-        std::cout << "AES key: " << dh_client.convert_key_to_hex(dh_client.get_aes_key()) << std::endl;
+        // std::cout << "AES key: " << dh_client.convert_key_to_hex(dh_client.get_aes_key()) << std::endl;
 
 
         while (true) {
