@@ -58,6 +58,7 @@ To connect to a server:
 ```bash
 ./build/cpp-encrypted-chat connect <server_ip_address>
 ```
+*Note: The program is currently hard coded to 127.0.0.1 no matter what you enter in this parameter*
 
 Once connected, you can input messages into the command line. 
 To close the connection type `exit` in the client.
