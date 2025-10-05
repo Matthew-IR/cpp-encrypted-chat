@@ -132,7 +132,7 @@ std::string DHExchange::encrypt(const std::string& plaintext) {
             )
         );
 
-        std::cout << "Encoded output: " << encoded_output << std::endl;
+        // std::cout << "Encoded output: " << encoded_output << std::endl;
 
         return encoded_output;
 
